@@ -4,14 +4,21 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "About this blog"
+    "text": "To be filled."
   },
   {
     "objectID": "index.html",
     "href": "index.html",
     "title": "QuartoBlogTest",
     "section": "",
-    "text": "news\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\n\n\n\n\nJul 3, 2022\n\n\nHarlow Malloc\n\n\n\n\n\n\n  \n\n\n\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nJun 30, 2022\n\n\nTristan O’Malley\n\n\n\n\n\n\nNo matching items"
+    "text": "Jul 3, 2022\n\n\nJorge Vila Tomás\n\n\n\n\n\n\n  \n\n\n\n\n\n\n\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\n\n\n\n\nJul 3, 2022\n\n\nHarlow Malloc\n\n\n\n\n\n\n  \n\n\n\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nJun 30, 2022\n\n\nTristan O’Malley\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "posts/notebook/index.html",
+    "href": "posts/notebook/index.html",
+    "title": "Notebook testing",
+    "section": "",
+    "text": "import numpy as np\nimport matplotlib.pyplot as plt\n\n\na = np.array([[1,2,3],\n              [4,5,6],\n              [7,8,9]])\n\na\n\narray([[1, 2, 3],\n       [4, 5, 6],\n       [7, 8, 9]])\n\n\n\n\n\n\nplt.figure()\nplt.plot(range(5))\nplt.show()"
   },
   {
     "objectID": "posts/post-with-code/index.html",
