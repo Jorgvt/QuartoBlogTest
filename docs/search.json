@@ -1,26 +1,5 @@
 [
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "To be filled."
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "QuartoBlogTest",
-    "section": "",
-    "text": "Jul 3, 2022\n\n\nJorge Vila Tomás\n\n\n\n\n\n\n  \n\n\n\n\n\n\n\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\n\n\n\n\nJul 3, 2022\n\n\nHarlow Malloc\n\n\n\n\n\n\n  \n\n\n\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nJun 30, 2022\n\n\nTristan O’Malley\n\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "posts/notebook/index.html",
-    "href": "posts/notebook/index.html",
-    "title": "Notebook testing",
-    "section": "",
-    "text": "import numpy as np\nimport matplotlib.pyplot as plt\n\n\na = np.array([[1,2,3],\n              [4,5,6],\n              [7,8,9]])\n\na\n\narray([[1, 2, 3],\n       [4, 5, 6],\n       [7, 8, 9]])\n\n\n\n\n\n\nplt.figure()\nplt.plot(range(5))\nplt.show()"
-  },
-  {
     "objectID": "posts/post-with-code/index.html",
     "href": "posts/post-with-code/index.html",
     "title": "Post With Code",
@@ -33,5 +12,47 @@
     "title": "Welcome To My Blog",
     "section": "",
     "text": "Since this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts."
+  },
+  {
+    "objectID": "posts/notebook/index.html",
+    "href": "posts/notebook/index.html",
+    "title": "Notebook testing",
+    "section": "",
+    "text": "import numpy as np\nimport matplotlib.pyplot as plt\n\n\n\n\na = np.array([[1,2,3],\n              [4,5,6],\n              [7,8,9]])\n\n\na\n\narray([[1, 2, 3],\n       [4, 5, 6],\n       [7, 8, 9]])\n\n\n\n\n\n\nplt.figure()\nplt.plot(range(5))\nplt.show()"
+  },
+  {
+    "objectID": "posts/einops/Einops.html",
+    "href": "posts/einops/Einops.html",
+    "title": "Visualizando Einops: Parte 1",
+    "section": "",
+    "text": "from rich import inspect\nimport numpy as np\nimport matplotlib.pyplot as plt\nimport tensorflow as tf\nfrom tensorflow.keras import layers\nfrom einops.layers.keras import Rearrange, Reduce"
+  },
+  {
+    "objectID": "posts/einops/Einops.html#mantiendo-la-dimensión-de-los-canales",
+    "href": "posts/einops/Einops.html#mantiendo-la-dimensión-de-los-canales",
+    "title": "Visualizando Einops: Parte 1",
+    "section": "Mantiendo la dimensión de los canales",
+    "text": "Mantiendo la dimensión de los canales\nComo hemos podido ver, una de las desventajas de estirar la imagen completa es que perdemos la información de los colores. Lo bonito de utilizar einops es que podemos especificar que queremos estirar únicamente las dimensiones de alto y ancho, pero que queremos dejar igual la dimensión de los canales. De esta forma podemos mantener la misma información de color que en la imagen original, lo que facilita la intepretación de la operación.\nAlgo que nos planteamos al utilizar Flatten() es por qué dimensión empezamos a estirar los datos. En cambio, al utilizar einops estamos haciendo esta elección, ya que somos nosotros los que elegimos el orden al escribir la operación. Por ejemplo, al escribir \"b h w c -> b (h w) c\", estamos indicando que queremos estirar primero las filas y luego las columnas. En cambio, al escribir \"b h w c -> b (w h) c\", estaremos estirando primero las columnas y luego las filas. Podemos ver como cambian los resultados:\n\nsample_flatten_einops = Rearrange(\"b h w c -> b (h w) c\")(sample).numpy()\nplt.imshow(sample_flatten_einops)\nplt.show()\n\n\n\n\n\nsample_flatten_einops = Rearrange(\"b h w c -> b (w h) c\")(sample).numpy()\nplt.imshow(sample_flatten_einops)\nplt.show()\n\n\n\n\nEn el primer caso vemos como la operación va recorriendo las filas y colocándolas una al lado de la otra (lo que se podría entender como estirar las filas), mientras que en el segundo caso sucede lo mismo con las columnas; se coge la primera columna, se estira y se repite el proceso con las siguientes columnas.\nEn muchos casos puede que no sea necesario conocer el funcionamiento detallado de estas operaciones, pero es un ejercicio interesante y no está de más tener claro cómo s eestán aplicando exactamente las operaciones que vamos realizando."
+  },
+  {
+    "objectID": "posts/einops/Einops.html#creación-de-la-entrada",
+    "href": "posts/einops/Einops.html#creación-de-la-entrada",
+    "title": "Visualizando Einops: Parte 1",
+    "section": "Creación de la entrada",
+    "text": "Creación de la entrada\n\nsample_maxpool_layer = layers.MaxPool2D(3)(sample).numpy()\nsample_maxpool_einops = Reduce(\"b (h h2) (w w2) c -> b h w c\", \"max\", h2=3, w2=3)(sample).numpy()\n\nsample_maxpool_layer.shape, sample_maxpool_einops.shape\n\n((1, 1, 1, 3), (1, 1, 1, 3))\n\n\n\nsample_maxpool_layer.squeeze(), sample_maxpool_einops.squeeze()\n\n(array([1., 1., 1.], dtype=float32), array([1., 1., 1.], dtype=float32))\n\n\n\nassert np.allclose(sample_maxpool_layer, sample_maxpool_einops)\n\n\nassert (layers.AveragePooling2D(2)(sample).numpy() == Reduce(\"b (h h2) (w w2) c -> b h w c\", \"mean\", h2=2, w2=2)(sample).numpy()).all()\n\n\nassert (layers.GlobalAveragePooling2D()(sample).numpy() == Reduce(\"b h w c -> b (h w c)\", \"mean\")(sample).numpy()).all()"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "To be filled."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "QuartoBlogTest",
+    "section": "",
+    "text": "español\n\n\ncodigo\n\n\ntutorial\n\n\n\n\nPrimera parte de la introducción a einops.\n\n\n\n\n\n\nAug 3, 2022\n\n\nJorge Vila Tomás\n\n\n\n\n\n\n  \n\n\n\n\n\n\n\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\n\n\n\n\nJul 3, 2022\n\n\nHarlow Malloc\n\n\n\n\n\n\n  \n\n\n\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nJun 30, 2022\n\n\nTristan O’Malley\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMar 7, 2022\n\n\nJorge Vila Tomás\n\n\n\n\n\n\nNo matching items"
   }
 ]
